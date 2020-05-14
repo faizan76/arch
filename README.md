@@ -1,3 +1,5 @@
+# Installation
+```bash
 su root
 lsblk
 cfdisk /dev/sda
@@ -61,4 +63,4 @@ unlink /run/runit/service/dhcpcd
 exit 
 umount -R /mnt
 reboot
-
+```

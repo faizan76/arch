@@ -1,66 +1,74 @@
-# Installation
+## Arch-Linux Installation
+
+disable fast boot if on windows from control panel and also from system bios
+
+enable UEFI for x86_64
+
 ```bash
-su root
+su root #if not root
 lsblk
-cfdisk /dev/sda
-mkfs.vfat /dev/sda1
-mkfs.ext4 /dev/sda2
-mount /dev/sda2 /mnt
+wipefs -all /dev/sdX
+cfdisk /dev/sdX
+
+label gpt
+/dev/sda1 512M linux boot EFI
+/dev/sda2 12G linux swap
+/dev/sda3 25G linux root
+/dev/sda4 remaining linux home
+
+mkfs.vfat /dev/sdx1
+mkfs.ext4 /dev/sdx3
+mkfs.ext4 /dev/sdx4
+
+mount /dev/sdx3 /mnt
 mkdir /mnt/boot
-mount /dev/sda1 /mnt/boot
-ping google.com
-pacman -Syy
-basestrap /mnt base base-devel runit elogind-runit
-basestrap /mnt linux linux-firmware
-fstabgen -U /mnt >> /mnt/etc/fstab
-artools-chroot /mnt
+mkdir /mnt/home
+mount /dev/sdx1 /mnt/boot
+mount /dev/sdx4 /mnt/home
+
+pacstrap /mnt base base-devel linux linux-firmware intel-ucode grub efibootmgr os-prober neovim networkmanager
+
+mkswap /dev/sdx2
+swapon /dev/sdx2
+
+genfstab -U /mnt>>/mnt/etc/fstab
+cat /mnt/etc/fstab
+arch-chroot /mnt
+```
+
+## ar-chroot /mnt
+
+```bash
 ln -sf /usr/share/zoneinfo/Asia/Karachi /etc/localtime
 hwclock --systohc
-pacman -Sy neovim
 nvim /etc/locale.gen
 locale-gen
-pacman -S grub os-prober efibootmgr intel-ucode dhcpcd-runit
-grub-install --recheck /dev/sda
-grub-mkconfig -o /boot/grub/grub.cfg
-passwd
-useradd -m a
-passwd a
-usermod -a -G wheel a
-
-nvim /etc/sudoers
-#uncomment %wheel
-
-nvim /etc/hostname
-nvim /etc/hosts
-#127.0.0.1	localhost
-#::1		localhost
-#127.0.1.1	pc.localdomain pc
-
-#Set up static internet through dhcpcd
-
-#interface enp3s0
-#static ip_address=192.168.0.42
-#static routers=192.168.0.1
-#static domain_name_servers=192.168.0.1 8.8.8.8
-
-#enable the service
-ln -s /etc/runit/sv/dhcpcd /run/runit/service
-
 nvim /etc/locale.conf
-#export LANG="en_US.UTF-8"
+echo pc > /etc/hostname
+echo "127.0.0.1        localhost" >> /etc/hosts
+echo "::1              localhost" >> /etc/hosts
+echo "127.0.1.1        pc.localdomain pc" >> /etc/hosts
 
-sudo sv up dhcpcd
-sudo sv stop dhcpcd
-sudo sv restart dhcpcd
-sudo sv status dhcpcd
+passwd
+useradd -mG wheel a
+passwd a
 
-cd /run/runit/service
-find . -maxdepth 1 -type l -ls
+mkdir /boot/efi && grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
+grub-mkconfig -o /boot/grub/grub.cfg
 
-#disable a service 
-unlink /run/runit/service/dhcpcd
-
-exit 
-umount -R /mnt
+systemctl enable NetworkManager
+exit
+umount -a
 reboot
+```
+
+## Login as pc@a
+
+```bash
+nmtui
+curl -LO https://larbs.xyz/larbs.sh
+su root
+pacman -S xf86-video-intel
+yay redshift
+redshift -o 3700
 ```

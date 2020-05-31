@@ -1,3 +1,11 @@
+## Bootable USB
+
+```bash
+lsblk
+sudo wipefs --all /dev/sdc
+sudo dd bs=4M if=/home/a/archlinux-2020.05.01-x86_64.iso of=/dev/sdc status=progress oflag=sync
+```
+
 ## Arch-Linux Installation
 
 disable fast boot if on windows from control panel and also from system bios

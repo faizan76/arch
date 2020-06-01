@@ -73,10 +73,14 @@ reboot
 ## Login as pc@a
 
 ```bash
-nmtui
-curl -LO https://larbs.xyz/larbs.sh
 su root
+nmtui
+pacman -Syu
+pacman -Syy
+pacman -Syyy
+curl -LO https://larbs.xyz/larbs.sh
 pacman -S xf86-video-intel
 yay redshift
-redshift -o 3700
+redshift -O 3700
+redshift -x 
 ```

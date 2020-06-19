@@ -84,3 +84,22 @@ yay redshift
 redshift -O 3700
 redshift -x 
 ```
+##(intel-error-sol)
+
+```bash
+nvim /etc/default/grub
+GRUB_CMDLINE_LINUX_DEFAULT="nomce"
+
+#mkgrubconfig
+sudo exec grub-mkconfig -o /boot/grub/grub.cfg
+```
+
+##(30-touchpad.conf)
+
+Section "InputClass"
+    Identifier "touchpad"
+    Driver "libinput"
+    MatchIsTouchpad "on"
+    Option "Tapping" "on"
+    Option "TappingButtonMap" "lmr"
+EndSection

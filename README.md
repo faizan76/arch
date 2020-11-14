@@ -95,7 +95,7 @@ sudo exec grub-mkconfig -o /boot/grub/grub.cfg
 ```
 
 ##(30-touchpad.conf) /etc/X11/xorg.conf.d/30-touchpad.conf
-
+```bash
 Section "InputClass"
     Identifier "touchpad"
     Driver "libinput"
@@ -103,3 +103,4 @@ Section "InputClass"
     Option "Tapping" "on"
     Option "TappingButtonMap" "lmr"
 EndSection
+```

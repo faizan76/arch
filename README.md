@@ -94,7 +94,7 @@ GRUB_CMDLINE_LINUX_DEFAULT="nomce"
 sudo exec grub-mkconfig -o /boot/grub/grub.cfg
 ```
 
-##(30-touchpad.conf)
+##(30-touchpad.conf) /etc/X11/xorg.conf.d/30-touchpad.conf
 
 Section "InputClass"
     Identifier "touchpad"

@@ -6,7 +6,7 @@ sudo wipefs --all /dev/sdc
 sudo dd bs=4M if=/home/a/archlinux-2020.05.01-x86_64.iso of=/dev/sdc status=progress oflag=sync
 ```
 
-## Arch-Linux Installation
+## Arch-Linux Installation for UEFI
 
 disable fast boot if on windows from control panel and also from system bios
 
@@ -69,6 +69,47 @@ exit
 umount -a
 reboot
 ```
+## Arch-Linux Installation for Legacy Bios
+
+enable fast boot from system bios
+disable UEFI
+
+```bash
+    1  timedatectl set-ntp true
+    2  lsblk
+    3  mkfs.ext4 /dev/sdb1
+    4  mkfs.ext4 /dev/sdb2
+    5  mkfs.ext4 /dev/sdb3
+    6  mount /dev/sdb2 /mnt
+    7  mkdir /mnt/boot
+    8  mkdir /mnt/home
+    9  mount /dev/sdb1 /mnt/boot
+   10  mount /dev/sdb3 /mnt/home
+   11  lsblk /dev/sdb
+   12  pacstrap /mnt base base-devel linux linux-firmware intel-ucode grub os-prober efibootmgr networkmanager neovim
+   13  genfstab -U /mnt >> /mnt/etc/fstab
+
+    #arch-root
+
+    1  ln -sf /usr/share/zoneinfo/Asia/Karachi /etc/localtime
+    2  hwclock --systohc
+    3  nvim /etc/locale.gen
+    4  locale-gen
+    5  nvim /etc/locale.conf
+    6  nvim /etc/hostname
+    7  nvim /etc/hosts
+    8  passwd
+    9  nvim /etc/sudoers
+   10  systemctl enable NetworkManager
+   11  grub-install --target=i386-pc /dev/sdb
+   12  grub-mkconfig -o /boot/grub/grub.cfg
+   13  useradd -mG wheel a
+   14  passwd a
+   15  nmtui
+   16  systemctl start NetworkManager
+```
+
+
 
 ## Login as pc@a
 

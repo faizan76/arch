@@ -125,7 +125,7 @@ yay redshift
 redshift -O 3700
 redshift -x 
 ```
-##(intel-error-sol)
+## (intel-error-sol)
 
 ```bash
 nvim /etc/default/grub
@@ -135,7 +135,7 @@ GRUB_CMDLINE_LINUX_DEFAULT="nomce"
 sudo exec grub-mkconfig -o /boot/grub/grub.cfg
 ```
 
-##(30-touchpad.conf) /etc/X11/xorg.conf.d/30-touchpad.conf
+## (30-touchpad.conf) /etc/X11/xorg.conf.d/30-touchpad.conf
 ```bash
 Section "InputClass"
     Identifier "touchpad"
